@@ -96,12 +96,16 @@ export async function extractFrames(video, options = {}) {
   for (let i = 0; i < totalToExtract; i++) {
     if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
 
-    const t = startTime + (i + 0.5) / effectiveFps;
-    if (t > video.duration) break;
-    if (t < 0) continue;
+    // Target time at the user's chosen FPS. We clamp to the video's duration
+    // so we still extract a frame even when the requested time is past the end
+    // (the canvas will capture the last actual frame, which is better than
+    // silently producing fewer files than the user asked for).
+    const requestedT = startTime + (i + 0.5) / effectiveFps;
+    const t = Math.min(Math.max(0, requestedT), Math.max(0, (video.duration || requestedT) - 0.001));
+    if (requestedT < 0) continue;
 
     // Source frame number for the filename (1-based)
-    const sourceFrameIdx = Math.max(1, Math.round(t * sourceFps) + 1);
+    const sourceFrameIdx = Math.max(1, Math.round(requestedT * sourceFps) + 1);
 
     // Seek and wait for the frame to be ready
     await seekTo(video, t);
@@ -138,6 +142,7 @@ export async function extractFrames(video, options = {}) {
       fps: effectiveFps,
       startFrame: startF,
       endFrame: endF,
+      requestedCount: totalToExtract,
       count: extractedCount,
       format,
       size: { width: w, height: h },
