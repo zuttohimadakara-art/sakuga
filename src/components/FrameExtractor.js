@@ -161,9 +161,16 @@ export default function FrameExtractor() {
       setCurrentTime(0);
     } catch (e) {
       if (e instanceof FetchError) {
-        // Map to a translation key
-        const key = `urlError${e.code.charAt(0).toUpperCase() + e.code.slice(1)}`;
-        setUrlError(tInput(key) !== key ? tInput(key) : tInput('urlError'));
+        // Map FetchError.code to its translation key suffix
+        const keyMap = {
+          cors: 'urlErrorCORS',
+          notFound: 'urlError404',
+          format: 'urlErrorFormat',
+          parse: 'urlError',
+          network: 'urlError',
+        };
+        const key = keyMap[e.code] || 'urlError';
+        setUrlError(tInput(key) || tInput('urlError'));
       } else {
         setUrlError(tInput('urlError'));
       }
