@@ -633,16 +633,6 @@ export default function FrameExtractor() {
               </div>
             </Field>
 
-            {/* Estimate */}
-            <div className="text-sm text-fg-muted bg-bg/50 rounded px-3 py-2">
-              <p>
-                {tExtract('estimated')}: <span className="text-fg font-mono">{estimatedFrames}</span>
-              </p>
-              {estimatedFrames > 1500 && (
-                <p className="text-amber-400/80 text-xs mt-1">{tExtract('estimateOver')}</p>
-              )}
-            </div>
-
             {/* Action */}
             {!zipBlob ? (
               <button
@@ -653,7 +643,7 @@ export default function FrameExtractor() {
               >
                 {isExtracting
                   ? tExtract('extractingProgress', { done: extractProgress.done, total: extractProgress.total })
-                  : tExtract('extract', { count: estimatedFrames })}
+                  : tExtract('extract')}
               </button>
             ) : (
               <div className="space-y-2">
