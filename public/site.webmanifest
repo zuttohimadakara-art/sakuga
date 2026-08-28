@@ -1,0 +1,12 @@
+{
+  "name": "getsakuga",
+  "short_name": "getsakuga",
+  "description": "Frame-by-frame video extractor for animators",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070a14",
+  "theme_color": "#070a14",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" }
+  ]
+}

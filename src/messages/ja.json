@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "title": "getsakuga — 動画からアニメフレームを抽出",
+    "description": "アニメーター向けの無料ブラウザ内フレーム抽出ツール。クリップをアップロード、またはサクガボールからリンクを貼り付け、1フレームずつスクラブしてFPSを選び、PNGのZIPとしてダウンロード。100%クライアントサイド、アップロード不要。",
+    "ogTitle": "getsakuga — アニメーター向けフレーム単位の動画抽出ツール"
+  },
+  "common": {
+    "yes": "はい",
+    "no": "いいえ",
+    "cancel": "キャンセル",
+    "loading": "読み込み中…",
+    "error": "エラー",
+    "copy": "コピー",
+    "copied": "コピーしました"
+  },
+  "header": {
+    "nav": {
+      "home": "ツール",
+      "about": "概要",
+      "privacy": "プライバシー"
+    }
+  },
+  "hero": {
+    "badge": "無料 · アップロード不要 · 100%ブラウザ内",
+    "title": "動画からフレームを取り出す。",
+    "subtitle": "クリップをドロップ、サクガボールのURLを貼り付け、またはMP4を直接指定。1フレームずつステップし、FPSを選んで、PNGのZIPをダウンロード。",
+    "cta": "動画を読み込む"
+  },
+  "input": {
+    "tabFile": "ファイルをアップロード",
+    "tabUrl": "URLを貼り付け",
+    "dropHere": "動画をここにドロップ",
+    "orClick": "またはクリックして選択",
+    "supportedFormats": "MP4、WebM、MOV、GIF — ブラウザで再生可能なものすべて",
+    "urlPlaceholder": "https://www.sakugabooru.com/post/show/123456  または  https://…/clip.mp4",
+    "urlLoad": "動画を読み込む",
+    "urlError": "URLを読み込めませんでした。サイトがクロスオリジン制限している可能性があります — ダウンロードしてドロップしてください。",
+    "urlErrorCORS": "クロスオリジン制限。直接読み込みが許可されていません。ファイルを保存してアップロードしてください。",
+    "urlError404": "動画が見つかりません。URLを確認してください。",
+    "urlErrorFormat": "URLが対応動画形式を指していません。",
+    "urlFetching": "動画を取得中…",
+    "urlScraping": "ページから動画を探しています…"
+  },
+  "player": {
+    "frameLabel": "フレーム",
+    "ofLabel": "/",
+    "timeLabel": "時間",
+    "play": "再生",
+    "pause": "一時停止",
+    "stepBack": "前のフレーム",
+    "stepForward": "次のフレーム",
+    "jumpStart": "先頭へ",
+    "jumpEnd": "末尾へ",
+    "speed": "速度",
+    "loop": "ループ",
+    "noVideo": "動画が読み込まれていません。"
+  },
+  "extract": {
+    "title": "フレームを抽出",
+    "fpsLabel": "抽出する秒間フレーム数 (FPS)",
+    "fpsHint": "12 = TVアニメ、24 = 映画、30 = Web、60 = ゲーム。任意の値も指定可。",
+    "preset12": "12 (TVアニメ)",
+    "preset24": "24 (映画)",
+    "preset30": "30 (Web)",
+    "preset60": "60 (ゲーム)",
+    "presetSource": "ソース (全フレーム)",
+    "rangeLabel": "フレーム範囲",
+    "rangeAll": "全範囲",
+    "rangeCustom": "範囲指定",
+    "rangeFrom": "開始フレーム",
+    "rangeTo": "終了フレーム",
+    "formatLabel": "画像形式",
+    "formatPng": "PNG (可逆)",
+    "formatJpg": "JPEG (軽量)",
+    "qualityLabel": "JPEG品質",
+    "sizeLabel": "出力サイズ",
+    "sizeFull": "オリジナル",
+    "sizeHalf": "½",
+    "sizeQuarter": "¼",
+    "estimated": "推定フレーム数",
+    "estimatedCount": "{count} フレームが抽出されます。",
+    "estimateOver": "大量のフレームです — 1分以上かかる可能性があります。",
+    "extract": "{count} フレームを抽出",
+    "extracting": "抽出中…",
+    "extractingProgress": "{total} 中 {done} 抽出済み…",
+    "ready": "{count} フレーム準備完了",
+    "downloadZip": "ZIPをダウンロード",
+    "downloadStarted": "ダウンロード開始",
+    "errorNoVideo": "まず動画を読み込んでください。",
+    "errorInvalidRange": "終了フレームは開始フレームより後である必要があります。",
+    "errorRangeTooLarge": "範囲が大きすぎます。1回のエクスポートは5,000フレーム以下にしてください。",
+    "errorGeneric": "エラーが発生しました。再試行するか範囲を縮小してください。"
+  },
+  "privacy": {
+    "title": "動画がデバイスから出ることはありません。",
+    "body": "すべてがブラウザ内で実行されます — HTML5 video要素とCanvas APIを使用。動画ファイル、選択したフレーム、ZIPはすべてあなたのマシン上に留まります。こちら側からは見えません — アップロードステップも、サーバーサイド処理も、動画コンテンツに関するテレメトリもありません。"
+  },
+  "footer": {
+    "tagline": "他のアニメーターを研究するアニメーターのために。",
+    "madeBy": "動く絵を描く人のために {name} が作りました。",
+    "aboutLink": "概要",
+    "privacyLink": "プライバシー"
+  },
+  "about": {
+    "title": "getsakuga について",
+    "body": "getsakugaは、アニメーションクリップからリファレンスフレームを抽出するための単一目的のツールです。タイムリや中割、キーフレームを研究したいアニメーター向け — 数枚の静止画を書き出すためだけにAfter Effectsを起動する必要はありません。",
+    "features": {
+      "clientSide": "100%ブラウザ内。クリップはどこにもアップロードされません。",
+      "sakugabooru": "サクガボールの投稿URLを貼り付け — MP4を自動検出します。",
+      "scrub": "ブラウザのvideo要素によるフレーム精度のステッピング。",
+      "zip": "フレームシーケンスは連番ファイル名のZIPとして出力。",
+      "free": "永久無料。サインアップなし、透かしなし、ブラウザが扱える範囲以外の制限なし。"
+    }
+  },
+  "seo": {
+    "keywords": "フレーム抽出, 動画からフレーム, アニメリファレンス, サクガボール, フレーム単位, 動画からPNG, アニメ研究, モーションリファレンス"
+  }
+}

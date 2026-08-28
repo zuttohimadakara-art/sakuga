@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "title": "getsakuga — Animations-Frames aus Videos extrahieren",
+    "description": "Kostenloses In-Browser-Frame-Extraktor-Tool für Animator:innen. Lade einen Clip hoch oder füge einen Sakugabooru-Link ein, gehe Bild für Bild durch, wähle deine FPS und lade die Frames als ZIP herunter. 100 % clientseitig, kein Upload.",
+    "ogTitle": "getsakuga — Bild-für-Bild-Video-Extraktor für Animator:innen"
+  },
+  "common": {
+    "yes": "Ja",
+    "no": "Nein",
+    "cancel": "Abbrechen",
+    "loading": "Lädt…",
+    "error": "Fehler",
+    "copy": "Kopieren",
+    "copied": "Kopiert"
+  },
+  "header": {
+    "nav": {
+      "home": "Tool",
+      "about": "Über",
+      "privacy": "Datenschutz"
+    }
+  },
+  "hero": {
+    "badge": "Kostenlos · Kein Upload · 100 % im Browser",
+    "title": "Frames aus jedem Video extrahieren.",
+    "subtitle": "Zieh einen Clip hierher, füge einen Sakugabooru-Link ein oder zeig auf eine beliebige MP4. Schritt für Schritt durchgehen, FPS wählen und ein ZIP mit PNGs herunterladen.",
+    "cta": "Video laden"
+  },
+  "input": {
+    "tabFile": "Datei hochladen",
+    "tabUrl": "URL einfügen",
+    "dropHere": "Video hier ablegen",
+    "orClick": "oder klicken zum Durchsuchen",
+    "supportedFormats": "MP4, WebM, MOV, GIF — alles, was dein Browser abspielen kann",
+    "urlPlaceholder": "https://www.sakugabooru.com/post/show/123456  oder  https://…/clip.mp4",
+    "urlLoad": "Video laden",
+    "urlError": "URL konnte nicht geladen werden. Die Seite blockiert möglicherweise Cross-Origin-Anfragen — lade die Datei herunter und lege sie ab.",
+    "urlErrorCORS": "Cross-Origin-Block. Direktes Laden nicht erlaubt. Speichere die Datei und lade sie hoch.",
+    "urlError404": "Video nicht gefunden. Überprüfe die URL und versuche es erneut.",
+    "urlErrorFormat": "URL zeigt auf kein unterstütztes Videoformat.",
+    "urlFetching": "Video wird abgerufen…",
+    "urlScraping": "Video auf der Seite wird gesucht…"
+  },
+  "player": {
+    "frameLabel": "Frame",
+    "ofLabel": "von",
+    "timeLabel": "Zeit",
+    "play": "Abspielen",
+    "pause": "Pause",
+    "stepBack": "Vorheriger Frame",
+    "stepForward": "Nächster Frame",
+    "jumpStart": "Zum Anfang",
+    "jumpEnd": "Zum Ende",
+    "speed": "Geschwindigkeit",
+    "loop": "Schleife",
+    "noVideo": "Noch kein Video geladen."
+  },
+  "extract": {
+    "title": "Frames extrahieren",
+    "fpsLabel": "Zu extrahierende Bilder pro Sekunde",
+    "fpsHint": "12 für TV-Anime, 24 für Film, 30 für Web, 60 für Spiele. Oder ein beliebiger Wert.",
+    "preset12": "12 (TV-Anime)",
+    "preset24": "24 (Film)",
+    "preset30": "30 (Web)",
+    "preset60": "60 (Spiele)",
+    "presetSource": "Original (jeder Frame)",
+    "rangeLabel": "Frame-Bereich",
+    "rangeAll": "Gesamtes Video",
+    "rangeCustom": "Benutzerdefiniert",
+    "rangeFrom": "Von Frame",
+    "rangeTo": "Bis Frame",
+    "formatLabel": "Bildformat",
+    "formatPng": "PNG (verlustfrei)",
+    "formatJpg": "JPEG (kleinere Dateien)",
+    "qualityLabel": "JPEG-Qualität",
+    "sizeLabel": "Ausgabegröße",
+    "sizeFull": "Original",
+    "sizeHalf": "½",
+    "sizeQuarter": "¼",
+    "estimated": "Geschätzte Frames",
+    "estimatedCount": "{count} Frames werden extrahiert.",
+    "estimateOver": "Das sind viele Frames — kann eine Minute dauern.",
+    "extract": "{count} Frames extrahieren",
+    "extracting": "Extrahiere…",
+    "extractingProgress": "Extrahiere {done} von {total}…",
+    "ready": "{count} Frames bereit",
+    "downloadZip": "ZIP herunterladen",
+    "downloadStarted": "Download gestartet",
+    "errorNoVideo": "Lade zuerst ein Video.",
+    "errorInvalidRange": "Ende muss nach dem Anfang liegen.",
+    "errorRangeTooLarge": "Bereich zu groß. Maximal 5.000 Frames pro Export.",
+    "errorGeneric": "Etwas ist schiefgegangen. Versuche es erneut oder verwende einen kleineren Bereich."
+  },
+  "privacy": {
+    "title": "Dein Video verlässt nie dein Gerät.",
+    "body": "Alles läuft im Browser — mit dem HTML5-Video-Element und der Canvas-API. Die Videodatei, deine Frame-Auswahl und das ZIP bleiben alle auf deinem Rechner. Wir können sie nicht sehen — kein Upload, keine serverseitige Verarbeitung, keine Telemetrie über Videoinhalte."
+  },
+  "footer": {
+    "tagline": "Für Animator:innen, die andere Animator:innen studieren.",
+    "madeBy": "Von {name} für die Leute, die bewegte Bilder zeichnen.",
+    "aboutLink": "Über",
+    "privacyLink": "Datenschutz"
+  },
+  "about": {
+    "title": "Über getsakuga",
+    "body": "getsakuga ist ein zweckgebundenes Tool zum Extrahieren von Referenz-Frames aus Animationsclips. Für Animator:innen, die Timing, Inbetweening und Key-Posen studieren wollen — ohne After Effects zu starten, nur um ein paar Stills zu exportieren.",
+    "features": {
+      "clientSide": "100 % im Browser. Deine Clips werden nirgendwo hochgeladen.",
+      "sakugabooru": "Füge eine beliebige Sakugabooru-Post-URL ein — wir finden die MP4 für dich.",
+      "scrub": "Frame-genaue Steuerung über das Video-Element des Browsers.",
+      "zip": "Frame-Sequenzen werden als ZIP mit fortlaufenden Dateinamen exportiert.",
+      "free": "Für immer kostenlos. Keine Anmeldung, kein Wasserzeichen, keine Grenzen außer denen deines Browsers."
+    }
+  },
+  "seo": {
+    "keywords": "Frame-Extraktor, Video zu Frames, Animationsreferenz, Sakugabooru-Downloader, Bild für Bild, Video zu PNG, Animationsstudie, Motion-Referenz"
+  }
+}
