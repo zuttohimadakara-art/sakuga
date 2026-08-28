@@ -215,17 +215,36 @@ export default function FrameExtractor() {
   const onLoadedMetadata = async () => {
     const v = videoRef.current;
     if (!v) return;
-    // Probe source FPS by walking one second of frames
-    const sourceFps = await probeFpsFromVideo(v);
-    const totalFrames = Math.max(1, Math.round(sourceFps * v.duration));
+    // Set defaults IMMEDIATELY so the player is usable right away, then refine
+    // the source FPS in the background. The 4-second probe was making the UI
+    // feel unresponsive on first load.
+    const dur = v.duration;
+    const guessFps = 24;
+    const guessTotal = Math.max(1, Math.round(guessFps * dur));
     setVideoMeta({
-      duration: v.duration,
-      sourceFps,
+      duration: dur,
+      sourceFps: guessFps,
       width: v.videoWidth,
       height: v.videoHeight,
-      totalFrames,
+      totalFrames: guessTotal,
     });
-    setRangeTo(totalFrames);
+    setRangeTo(guessTotal);
+    // Now refine the FPS in the background (1.5s timeout instead of 4s)
+    try {
+      const sourceFps = await Promise.race([
+        probeFpsFromVideo(v),
+        new Promise((resolve) => setTimeout(() => resolve(guessFps), 1500)),
+      ]);
+      const refinedTotal = Math.max(1, Math.round(sourceFps * dur));
+      setVideoMeta((prev) => prev && ({
+        ...prev,
+        sourceFps,
+        totalFrames: refinedTotal,
+      }));
+      setRangeTo(refinedTotal);
+    } catch {
+      // Probe failed; keep the guess
+    }
   };
 
   // --- Extract ---
@@ -370,8 +389,9 @@ export default function FrameExtractor() {
         </div>
       )}
 
-      {/* PLAYER + EXTRACT (visible when video is loaded) */}
-      {videoUrl && videoMeta && (
+      {/* PLAYER + EXTRACT (video element shows as soon as videoUrl is set;
+          controls + extract panel wait for videoMeta from onLoadedMetadata) */}
+      {videoUrl && (
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Player column */}
           <div className="lg:col-span-2 space-y-3">
@@ -381,6 +401,19 @@ export default function FrameExtractor() {
                 src={videoUrl}
                 onTimeUpdate={onTimeUpdate}
                 onLoadedMetadata={onLoadedMetadata}
+                onError={(e) => {
+                  const err = videoRef.current?.error;
+                  let msg = 'Browser could not decode this video.';
+                  if (err) {
+                    if (err.code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED) msg = 'Format not supported by your browser. Try MP4 (H.264) or WebM.';
+                    else if (err.code === MediaError.MEDIA_ERR_DECODE) msg = 'File is corrupted or in an unsupported codec.';
+                    else if (err.code === MediaError.MEDIA_ERR_NETWORK) msg = 'Network error while loading the video.';
+                  }
+                  setUrlError(msg);
+                  if (videoUrl) URL.revokeObjectURL(videoUrl);
+                  setVideoUrl(null);
+                  setVideoMeta(null);
+                }}
                 onPlay={() => setIsPlaying(true)}
                 onPause={() => setIsPlaying(false)}
                 onClick={togglePlay}
@@ -389,6 +422,14 @@ export default function FrameExtractor() {
                 preload="auto"
               />
             </div>
+            {/* Loading state while metadata is being probed */}
+            {!videoMeta && (
+              <div className="flex items-center justify-center gap-3 py-6 text-fg-muted text-sm">
+                <span className="inline-block w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                {tCommon('loading')}
+              </div>
+            )}
+            {videoMeta && (<>
             {/* Scrub bar */}
             <div className="space-y-2">
               <input
@@ -448,9 +489,11 @@ export default function FrameExtractor() {
               <kbd className="px-1.5 py-0.5 bg-white/5 border border-white/10 rounded font-mono">→</kbd>{' '}
               step
             </p>
+            </>)}
           </div>
 
           {/* Extract controls */}
+          {videoMeta && (
           <div className="space-y-4 bg-bg-raised border border-border rounded-lg p-4">
             <h2 className="font-display font-bold text-lg">{tExtract('title')}</h2>
 
@@ -648,6 +691,7 @@ export default function FrameExtractor() {
               <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded px-3 py-2">{extractError}</p>
             )}
           </div>
+          )}
         </div>
       )}
     </div>
