@@ -58,6 +58,24 @@ function badRequest(message, details) {
   );
 }
 
+// Real browser User-Agent — Cloudflare and most anti-bot systems
+// reject requests that look like a bot. The UA must be paired with
+// other browser-like headers (Accept, Accept-Language, etc.) below
+// to pass basic bot detection.
+const BROWSER_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,video/*;q=0.8,*/*;q=0.5',
+  'Accept-Language': 'en-US,en;q=0.9,ja;q=0.8',
+  'Accept-Encoding': 'gzip, deflate, br',
+  'DNT': '1',
+  'Connection': 'keep-alive',
+  'Upgrade-Insecure-Requests': '1',
+  'Sec-Fetch-Dest': 'document',
+  'Sec-Fetch-Mode': 'navigate',
+  'Sec-Fetch-Site': 'none',
+  'Sec-Fetch-User': '?1',
+};
+
 async function fetchWithTimeout(url, opts = {}) {
   const ac = new AbortController();
   const t = setTimeout(() => ac.abort(), TIMEOUT_MS);
@@ -75,10 +93,7 @@ function isLikelyVideoUrl(url) {
 async function scrapeSakugabooruPage(postUrl) {
   // Returns the direct MP4 URL found in the post page HTML, or null.
   const res = await fetchWithTimeout(postUrl, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; getsakuga/1.0; +https://getsakuga.com)',
-      'Accept': 'text/html,application/xhtml+xml',
-    },
+    headers: { ...BROWSER_HEADERS, 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' },
   });
   if (!res.ok) {
     throw new Error(`sakugabooru returned ${res.status}`);
@@ -123,7 +138,7 @@ function jsonError(message, code, status) {
 async function fetchAndStream(targetUrl, request) {
   const upstream = await fetchWithTimeout(targetUrl, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; getsakuga/1.0; +https://getsakuga.com)',
+      ...BROWSER_HEADERS,
       'Accept': request.headers.get('accept') || '*/*',
     },
   });
@@ -247,7 +262,7 @@ async function handle(request) {
     // Try to scrape one more time as a generic video page
     try {
       const res = await fetchWithTimeout(target, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; getsakuga/1.0; +https://getsakuga.com)' },
+        headers: { ...BROWSER_HEADERS, 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8' },
       });
       if (res.ok) {
         const ct = res.headers.get('content-type') || '';
