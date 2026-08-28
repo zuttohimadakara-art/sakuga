@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { fetchVideoFromUrl, FetchError } from '@/lib/urlFetcher';
 import { extractFrames } from '@/lib/extractFrames';
 
 export default function FrameExtractor() {
@@ -21,10 +20,6 @@ export default function FrameExtractor() {
   const videoRef = useRef(null);
 
   // Input state
-  const [inputMode, setInputMode] = useState('file');
-  const [urlInput, setUrlInput] = useState('');
-  const [urlLoading, setUrlLoading] = useState(false);
-  const [urlError, setUrlError] = useState('');
   const fileInputRef = useRef(null);
 
   // Extract state
@@ -107,14 +102,12 @@ export default function FrameExtractor() {
   const handleFile = useCallback((file) => {
     if (!file) return;
     if (!file.type.startsWith('video/') && !/\.(mp4|webm|mov|gif|m4v|ogv|mkv|avi)$/i.test(file.name)) {
-      setUrlError('That file doesn\'t look like a video.');
-      return;
+      return; // ignore non-video files silently
     }
     if (videoUrl) URL.revokeObjectURL(videoUrl);
     const url = URL.createObjectURL(file);
     setVideoUrl(url);
     setVideoName(file.name);
-    setUrlError('');
     setExtractError('');
     setZipBlob(null);
     setCurrentTime(0);
@@ -137,46 +130,6 @@ export default function FrameExtractor() {
   };
   const onDragLeave = (e) => {
     e.currentTarget.classList.remove('drop-active');
-  };
-
-  const loadFromUrl = async () => {
-    if (!urlInput.trim()) return;
-    setUrlLoading(true);
-    setUrlError('');
-    try {
-      const { blob, sourceUrl } = await fetchVideoFromUrl(urlInput);
-      if (videoUrl) URL.revokeObjectURL(videoUrl);
-      const url = URL.createObjectURL(blob);
-      setVideoUrl(url);
-      // Derive a filename from the URL
-      let name = 'video.mp4';
-      try {
-        const u = new URL(sourceUrl);
-        const last = u.pathname.split('/').pop();
-        if (last) name = decodeURIComponent(last);
-      } catch { /* keep default */ }
-      setVideoName(name);
-      setExtractError('');
-      setZipBlob(null);
-      setCurrentTime(0);
-    } catch (e) {
-      if (e instanceof FetchError) {
-        // Map FetchError.code to its translation key suffix
-        const keyMap = {
-          cors: 'urlErrorCORS',
-          notFound: 'urlError404',
-          format: 'urlErrorFormat',
-          parse: 'urlError',
-          network: 'urlError',
-        };
-        const key = keyMap[e.code] || 'urlError';
-        setUrlError(tInput(key) || tInput('urlError'));
-      } else {
-        setUrlError(tInput('urlError'));
-      }
-    } finally {
-      setUrlLoading(false);
-    }
   };
 
   // --- Video control ---
@@ -308,82 +261,36 @@ export default function FrameExtractor() {
     <div className="space-y-6">
       {/* INPUT AREA */}
       {!videoUrl && (
-        <div className="bg-bg-raised border border-border rounded-lg p-1">
-          {/* Tab switcher */}
-          <div className="flex border-b border-border">
-            <button
-              type="button"
-              onClick={() => { setInputMode('file'); setUrlError(''); }}
-              className={`flex-1 px-4 py-3 text-sm font-medium transition ${
-                inputMode === 'file' ? 'text-fg border-b-2 border-accent -mb-px' : 'text-fg-muted hover:text-fg'
-              }`}
-            >
-              {tInput('tabFile')}
-            </button>
-            <button
-              type="button"
-              onClick={() => { setInputMode('url'); setUrlError(''); }}
-              className={`flex-1 px-4 py-3 text-sm font-medium transition ${
-                inputMode === 'url' ? 'text-fg border-b-2 border-accent -mb-px' : 'text-fg-muted hover:text-fg'
-              }`}
-            >
-              {tInput('tabUrl')}
-            </button>
+        <div className="bg-bg-raised border border-border rounded-lg">
+          <div
+            onDrop={onDrop}
+            onDragOver={onDragOver}
+            onDragLeave={onDragLeave}
+            onClick={() => fileInputRef.current?.click()}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click(); }}
+            className="m-4 border-2 border-dashed border-border rounded-md py-16 px-6 text-center cursor-pointer hover:border-accent transition focus:outline-none focus-visible:border-accent"
+          >
+            <svg className="mx-auto mb-3 text-fg-subtle" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            <p className="text-fg font-medium mb-1">{tInput('dropHere')}</p>
+            <p className="text-fg-muted text-sm">{tInput('orClick')}</p>
+            <p className="text-fg-subtle text-xs mt-3">{tInput('supportedFormats')}</p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="video/*"
+              onChange={onFileInput}
+              className="hidden"
+            />
           </div>
-
-          {inputMode === 'file' && (
-            <div
-              onDrop={onDrop}
-              onDragOver={onDragOver}
-              onDragLeave={onDragLeave}
-              onClick={() => fileInputRef.current?.click()}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') fileInputRef.current?.click(); }}
-              className="m-4 border-2 border-dashed border-border rounded-md py-16 px-6 text-center cursor-pointer hover:border-accent transition focus:outline-none focus-visible:border-accent"
-            >
-              <svg className="mx-auto mb-3 text-fg-subtle" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="17 8 12 3 7 8" />
-                <line x1="12" y1="3" x2="12" y2="15" />
-              </svg>
-              <p className="text-fg font-medium mb-1">{tInput('dropHere')}</p>
-              <p className="text-fg-muted text-sm">{tInput('orClick')}</p>
-              <p className="text-fg-subtle text-xs mt-3">{tInput('supportedFormats')}</p>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="video/*"
-                onChange={onFileInput}
-                className="hidden"
-              />
-            </div>
-          )}
-
-          {inputMode === 'url' && (
-            <div className="m-4 space-y-3">
-              <div className="flex gap-2">
-                <input
-                  type="url"
-                  value={urlInput}
-                  onChange={(e) => setUrlInput(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter') loadFromUrl(); }}
-                  placeholder={tInput('urlPlaceholder')}
-                  className="flex-1 px-3 py-2.5 bg-bg border border-border rounded text-fg placeholder-fg-subtle text-sm focus:outline-none focus:border-accent"
-                />
-                <button
-                  type="button"
-                  onClick={loadFromUrl}
-                  disabled={urlLoading || !urlInput.trim()}
-                  className="px-5 py-2.5 bg-accent text-bg font-medium rounded text-sm hover:bg-accent-hover transition disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {urlLoading ? tCommon('loading') : tInput('urlLoad')}
-                </button>
-              </div>
-              {urlError && (
-                <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded px-3 py-2">{urlError}</p>
-              )}
-              <p className="text-xs text-fg-subtle">{tInput('supportedFormats')}</p>
+          {extractError && (
+            <div className="mx-4 mb-4">
+              <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded px-3 py-2">{extractError}</p>
             </div>
           )}
         </div>
@@ -409,7 +316,7 @@ export default function FrameExtractor() {
                     else if (err.code === MediaError.MEDIA_ERR_DECODE) msg = 'File is corrupted or in an unsupported codec.';
                     else if (err.code === MediaError.MEDIA_ERR_NETWORK) msg = 'Network error while loading the video.';
                   }
-                  setUrlError(msg);
+                  setExtractError(msg);
                   if (videoUrl) URL.revokeObjectURL(videoUrl);
                   setVideoUrl(null);
                   setVideoMeta(null);

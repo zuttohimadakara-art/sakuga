@@ -28,19 +28,9 @@
     "cta": "Charger une vidéo"
   },
   "input": {
-    "tabFile": "Téléverser un fichier",
-    "tabUrl": "Coller une URL",
     "dropHere": "Dépose une vidéo ici",
     "orClick": "ou clique pour parcourir",
-    "supportedFormats": "MP4, WebM, MOV, GIF — tout ce que ton navigateur peut lire",
-    "urlPlaceholder": "https://www.sakugabooru.com/post/show/123456  ou  https://…/clip.mp4",
-    "urlLoad": "Charger la vidéo",
-    "urlError": "Impossible de charger cette URL. Le site bloque peut-être les requêtes cross-origin — télécharge le fichier et dépose-le.",
-    "urlErrorCORS": "Blocage cross-origin. Le chargement direct n'est pas autorisé. Enregistre le fichier et téléverse-le.",
-    "urlError404": "Vidéo introuvable. Vérifie l'URL et réessaie.",
-    "urlErrorFormat": "L'URL ne pointe pas vers un format vidéo pris en charge.",
-    "urlFetching": "Récupération de la vidéo…",
-    "urlScraping": "Recherche de la vidéo sur la page…"
+    "supportedFormats": "MP4, WebM, MOV, GIF — tout ce que ton navigateur peut lire"
   },
   "player": {
     "frameLabel": "Frame",
@@ -130,5 +120,43 @@
       "title": "Contact — getsakuga",
       "description": "Contactez l'équipe getsakuga — rapports de bugs, demandes de fonctionnalités et retours bienvenus."
     }
+  },
+  "homeFeatures": {
+    "title": "Conçu pour le vrai travail des animateurs.",
+    "clientSideTitle": "Fonctionne dans le navigateur",
+    "clientSide": "100 % côté client. Vos clips ne sont jamais envoyés sur un serveur — la vidéo, les images et le ZIP restent sur votre appareil.",
+    "rangeTitle": "Plage d'images personnalisée",
+    "range": "Vous n'avez pas besoin de tout le clip ? Choisissez une image de début et de fin et n'exportez que celles-ci. Le metadata.json enregistre la plage pour que vous puissiez reprendre plus tard.",
+    "scrubTitle": "Pas image par image précis",
+    "scrub": "Utilisez les flèches pour avancer d'une image à la fois. Espace pour lire et mettre en pause. La barre de scrub est pilotée par requestVideoFrameCallback pour une vraie précision d'image.",
+    "fpsTitle": "FPS cibles au choix",
+    "fps": "Choisissez 12 pour l'anime TV, 24 pour le cinéma, 30 pour le web, 60 pour les jeux, ou une valeur personnalisée. Le taux source est détecté automatiquement.",
+    "zipTitle": "ZIP avec métadonnées",
+    "zip": "Les images sont exportées en ZIP avec des noms de fichiers séquentiels (frame_0001.png, frame_0002.png, …) et un metadata.json contenant les infos source, les FPS et la liste complète des fichiers.",
+    "freeTitle": "Gratuit, sans inscription",
+    "free": "Pas de compte, pas de filigrane, pas de limites au-delà de celles de votre navigateur. Fonctionne sur un déploiement Vercel gratuit sans serveur."
+  },
+  "homeFaq": {
+    "0": {
+      "q": "getsakuga télécharge-t-il ma vidéo sur un serveur ?",
+      "a": "Non. Tout s'exécute dans votre navigateur via l'élément vidéo HTML5 et l'API canvas. La vidéo, les images extraites et le ZIP restent sur votre appareil. Nous n'avons aucun traitement côté serveur et ne voyons jamais le contenu de votre vidéo."
+    },
+    "1": {
+      "q": "Quels formats vidéo fonctionnent ?",
+      "a": "Tout ce que votre navigateur peut lire — MP4 (H.264), WebM, MOV, GIF animé, et la plupart des clips encodés en MP4. Si votre navigateur ne peut pas décoder le codec, le lecteur affiche un message d'erreur clair au lieu d'échouer en silence."
+    },
+    "2": {
+      "q": "Puis-je extraire seulement quelques images spécifiques au lieu de la vidéo entière ?",
+      "a": "Oui — passez le sélecteur de plage de « Vidéo entière » à « Plage personnalisée » et saisissez une image de début et une image de fin. L'outil n'extraira que les images de cette plage. Le metadata.json enregistre la plage et les FPS source pour que vous puissiez reprendre là où vous vous étiez arrêté."
+    },
+    "3": {
+      "q": "Quels FPS dois-je choisir ?",
+      "a": "12 pour l'anime TV (taux de diffusion standard), 24 pour le cinéma, 30 pour la vidéo web, 60 pour les jeux. Si vous voulez chaque image source, choisissez Taux source. Le taux source est détecté automatiquement au chargement d'une vidéo."
+    },
+    "4": {
+      "q": "Et si ma vidéo fait 1000 images et que je veux tout ?",
+      "a": "Laissez les FPS sur Taux source et la plage sur Vidéo entière. L'outil extraira chaque image et les regroupera dans un ZIP. Pour les très longues vidéos, l'extraction peut prendre une minute — la barre de progression affichera l'état actuel."
+    },
+    "title": "Foire aux questions"
   }
 }

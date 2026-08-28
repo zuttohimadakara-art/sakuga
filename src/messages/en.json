@@ -31,8 +31,8 @@
     "title": "Built for the way animators actually work.",
     "clientSideTitle": "Runs in your browser",
     "clientSide": "100% client-side. Your clips never upload to any server — the video, the frames, and the ZIP all stay on your machine.",
-    "sakugabooruTitle": "Sakugabooru-friendly",
-    "sakugabooru": "Paste any sakugabooru post URL and we'll find the MP4. Or load a direct video link from anywhere.",
+    "rangeTitle": "Custom frame range",
+    "range": "Don't need the whole clip? Pick a start and end frame and only extract those. The metadata.json sidecar records the range so you can pick up where you left off.",
     "scrubTitle": "Frame-accurate stepping",
     "scrub": "Use the arrow keys to step one frame at a time. Space to play and pause. The scrub bar is driven by requestVideoFrameCallback for true frame accuracy.",
     "fpsTitle": "Any target FPS",
@@ -43,7 +43,6 @@
     "free": "No account, no watermark, no limits beyond what your browser can handle. Runs on a free Vercel deploy with no servers."
   },
   "homeFaq": {
-    "title": "Frequently asked questions",
     "0": {
       "q": "Does getsakuga upload my video to a server?",
       "a": "No. Everything runs in your browser using the HTML5 video element and the canvas API. The video, the extracted frames, and the ZIP all stay on your device. We have no server-side processing, and we never see your video content."
@@ -53,8 +52,8 @@
       "a": "Anything your browser can play — MP4 (H.264), WebM, MOV, animated GIF, and most MP4-encoded clips. If your browser can't decode the codec, the player shows a clear error message instead of failing silently."
     },
     "2": {
-      "q": "Can I extract from a sakugabooru post?",
-      "a": "Yes — paste any sakugabooru post URL (e.g. https://www.sakugabooru.com/post/show/123456). The tool reads the post page, finds the MP4 file, and loads it. If the post blocks cross-origin access, download the MP4 and drop it in instead."
+      "q": "Can I extract just a few specific frames instead of the whole video?",
+      "a": "Yes — switch the range selector from \"Whole video\" to \"Custom range\" and enter a start and end frame. The tool will only extract the frames in that range. The metadata.json sidecar records the range and the source FPS so you can pick up where you left off later."
     },
     "3": {
       "q": "What FPS should I choose?",
@@ -63,22 +62,13 @@
     "4": {
       "q": "What if my video is 1000 frames long and I want all of them?",
       "a": "Leave the FPS on Source rate and the range on Whole video. The tool will extract every frame and pack them into a ZIP. For very long videos, the extraction might take a minute — the progress bar will show the current state."
-    }
+    },
+    "title": "Frequently asked questions"
   },
   "input": {
-    "tabFile": "Upload file",
-    "tabUrl": "Paste URL",
     "dropHere": "Drop a video here",
     "orClick": "or click to browse",
-    "supportedFormats": "MP4, WebM, MOV, GIF — anything your browser can play",
-    "urlPlaceholder": "https://www.sakugabooru.com/post/show/123456  or  https://…/clip.mp4",
-    "urlLoad": "Load video",
-    "urlError": "Couldn't load that URL. The site may block cross-origin requests — download the file and drop it in instead.",
-    "urlErrorCORS": "Cross-origin block. The site doesn't allow direct loading from another domain. Save the file and upload it instead.",
-    "urlError404": "Video not found. Check the URL and try again.",
-    "urlErrorFormat": "URL doesn't point to a supported video format.",
-    "urlFetching": "Fetching video…",
-    "urlScraping": "Finding video on page…"
+    "supportedFormats": "MP4, WebM, MOV, GIF — anything your browser can play"
   },
   "player": {
     "frameLabel": "Frame",

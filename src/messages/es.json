@@ -28,19 +28,9 @@
     "cta": "Cargar vídeo"
   },
   "input": {
-    "tabFile": "Subir archivo",
-    "tabUrl": "Pegar URL",
     "dropHere": "Suelta un vídeo aquí",
     "orClick": "o haz clic para examinar",
-    "supportedFormats": "MP4, WebM, MOV, GIF — cualquier cosa que tu navegador pueda reproducir",
-    "urlPlaceholder": "https://www.sakugabooru.com/post/show/123456  o  https://…/clip.mp4",
-    "urlLoad": "Cargar vídeo",
-    "urlError": "No se pudo cargar esa URL. El sitio puede bloquear solicitudes cross-origin — descarga el archivo y suéltalo.",
-    "urlErrorCORS": "Bloqueo cross-origin. La carga directa no está permitida. Guarda el archivo y súbelo.",
-    "urlError404": "Vídeo no encontrado. Verifica la URL e inténtalo de nuevo.",
-    "urlErrorFormat": "La URL no apunta a un formato de vídeo compatible.",
-    "urlFetching": "Obteniendo vídeo…",
-    "urlScraping": "Buscando vídeo en la página…"
+    "supportedFormats": "MP4, WebM, MOV, GIF — cualquier cosa que tu navegador pueda reproducir"
   },
   "player": {
     "frameLabel": "Frame",
@@ -130,5 +120,43 @@
       "title": "Contacto — getsakuga",
       "description": "Contacta al equipo de getsakuga — informes de errores, ideas de funciones y comentarios bienvenidos."
     }
+  },
+  "homeFeatures": {
+    "title": "Pensado para el trabajo real de los animadores.",
+    "clientSideTitle": "Funciona en el navegador",
+    "clientSide": "100 % en el cliente. Tus clips nunca se suben a un servidor — el vídeo, los fotogramas y el ZIP se quedan en tu dispositivo.",
+    "rangeTitle": "Rango de fotogramas personalizado",
+    "range": "¿No necesitas todo el clip? Elige un fotograma de inicio y otro de fin y extrae solo esos. El metadata.json guarda el rango para que puedas continuar más tarde.",
+    "scrubTitle": "Avance fotograma a fotograma",
+    "scrub": "Usa las flechas para avanzar un fotograma cada vez. Espacio para reproducir y pausar. La barra de avance se basa en requestVideoFrameCallback para una precisión real de fotograma.",
+    "fpsTitle": "Cualquier FPS de destino",
+    "fps": "Elige 12 para anime de TV, 24 para cine, 30 para web, 60 para juegos o cualquier valor personalizado. La tasa de origen se detecta automáticamente.",
+    "zipTitle": "ZIP con metadatos",
+    "zip": "Los fotogramas se exportan como ZIP con nombres secuenciales (frame_0001.png, frame_0002.png, …) y un metadata.json con información de origen, FPS y la lista completa de archivos.",
+    "freeTitle": "Gratis, sin registro",
+    "free": "Sin cuenta, sin marca de agua, sin límites más allá de los de tu navegador. Funciona en un despliegue gratuito de Vercel sin servidores."
+  },
+  "homeFaq": {
+    "0": {
+      "q": "¿getsakuga sube mi vídeo a un servidor?",
+      "a": "No. Todo se ejecuta en tu navegador usando el elemento de vídeo HTML5 y la API de canvas. El vídeo, los fotogramas extraídos y el ZIP se quedan en tu dispositivo. No tenemos procesamiento del lado del servidor y nunca vemos el contenido de tu vídeo."
+    },
+    "1": {
+      "q": "¿Qué formatos de vídeo funcionan?",
+      "a": "Cualquiera que tu navegador pueda reproducir — MP4 (H.264), WebM, MOV, GIF animado y la mayoría de clips codificados en MP4. Si tu navegador no puede decodificar el códec, el reproductor muestra un mensaje de error claro en lugar de fallar en silencio."
+    },
+    "2": {
+      "q": "¿Puedo extraer solo algunos fotogramas específicos en lugar del vídeo completo?",
+      "a": "Sí — cambia el selector de rango de «Todo el vídeo» a «Rango personalizado» e introduce un fotograma de inicio y otro de fin. La herramienta solo extraerá los fotogramas de ese rango. El metadata.json guarda el rango y los FPS de origen para que puedas continuar donde lo dejaste."
+    },
+    "3": {
+      "q": "¿Qué FPS debería elegir?",
+      "a": "12 para anime de TV (la tasa estándar de emisión), 24 para cine, 30 para vídeo web, 60 para juegos. Si quieres todos los fotogramas de origen, elige Tasa de origen. La tasa de origen se detecta automáticamente al cargar un vídeo."
+    },
+    "4": {
+      "q": "¿Qué pasa si mi vídeo tiene 1000 fotogramas y los quiero todos?",
+      "a": "Deja los FPS en Tasa de origen y el rango en Todo el vídeo. La herramienta extraerá cada fotograma y los empaquetará en un ZIP. Para vídeos muy largos, la extracción puede tardar un minuto — la barra de progreso mostrará el estado actual."
+    },
+    "title": "Preguntas frecuentes"
   }
 }

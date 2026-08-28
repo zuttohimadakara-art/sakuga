@@ -28,19 +28,9 @@
     "cta": "Video laden"
   },
   "input": {
-    "tabFile": "Datei hochladen",
-    "tabUrl": "URL einfügen",
     "dropHere": "Video hier ablegen",
     "orClick": "oder klicken zum Durchsuchen",
-    "supportedFormats": "MP4, WebM, MOV, GIF — alles, was dein Browser abspielen kann",
-    "urlPlaceholder": "https://www.sakugabooru.com/post/show/123456  oder  https://…/clip.mp4",
-    "urlLoad": "Video laden",
-    "urlError": "URL konnte nicht geladen werden. Die Seite blockiert möglicherweise Cross-Origin-Anfragen — lade die Datei herunter und lege sie ab.",
-    "urlErrorCORS": "Cross-Origin-Block. Direktes Laden nicht erlaubt. Speichere die Datei und lade sie hoch.",
-    "urlError404": "Video nicht gefunden. Überprüfe die URL und versuche es erneut.",
-    "urlErrorFormat": "URL zeigt auf kein unterstütztes Videoformat.",
-    "urlFetching": "Video wird abgerufen…",
-    "urlScraping": "Video auf der Seite wird gesucht…"
+    "supportedFormats": "MP4, WebM, MOV, GIF — alles, was dein Browser abspielen kann"
   },
   "player": {
     "frameLabel": "Frame",
@@ -130,5 +120,43 @@
       "title": "Kontakt — getsakuga",
       "description": "Kontakt zum getsakuga-Team — Fehlerberichte, Funktionswünsche und Feedback willkommen."
     }
+  },
+  "homeFeatures": {
+    "title": "Gebaut für die tatsächliche Arbeit von Animatoren.",
+    "clientSideTitle": "Läuft im Browser",
+    "clientSide": "100 % client-seitig. Deine Clips werden auf keinen Server hochgeladen — das Video, die Frames und die ZIP bleiben alle auf deinem Gerät.",
+    "rangeTitle": "Eigener Frame-Bereich",
+    "range": "Du brauchst nicht den ganzen Clip? Wähle eine Start- und End-Frame und exportiere nur diese. Die metadata.json speichert den Bereich, damit du später an der gleichen Stelle weitermachen kannst.",
+    "scrubTitle": "Frame-genaues Stepping",
+    "scrub": "Mit den Pfeiltasten einen Frame nach dem anderen springen. Leertaste zum Abspielen und Pausieren. Die Scrub-Leiste nutzt requestVideoFrameCallback für echte Frame-Genauigkeit.",
+    "fpsTitle": "Beliebige Ziel-FPS",
+    "fps": "Wähle 12 für TV-Anime, 24 für Film, 30 für Web, 60 für Spiele oder einen beliebigen eigenen Wert. Die Quellrate wird automatisch erkannt.",
+    "zipTitle": "ZIP mit Metadaten",
+    "zip": "Frames werden als ZIP mit fortlaufenden Dateinamen (frame_0001.png, frame_0002.png, …) und einer metadata.json mit Quellinfo, FPS und der kompletten Dateiliste exportiert.",
+    "freeTitle": "Kostenlos, ohne Anmeldung",
+    "free": "Kein Konto, kein Wasserzeichen, keine Grenzen außer denen deines Browsers. Läuft auf einem kostenlosen Vercel-Deployment ohne Server."
+  },
+  "homeFaq": {
+    "0": {
+      "q": "Lädt getsakuga mein Video auf einen Server hoch?",
+      "a": "Nein. Alles läuft in deinem Browser über das HTML5-Videoelement und die Canvas-API. Das Video, die extrahierten Frames und die ZIP bleiben alle auf deinem Gerät. Wir haben keine serverseitige Verarbeitung und sehen deine Videoinhalte nie."
+    },
+    "1": {
+      "q": "Welche Videoformate funktionieren?",
+      "a": "Alles, was dein Browser abspielen kann — MP4 (H.264), WebM, MOV, animiertes GIF und die meisten MP4-codierten Clips. Wenn dein Browser den Codec nicht dekodieren kann, zeigt der Player eine klare Fehlermeldung statt stillschweigend zu scheitern."
+    },
+    "2": {
+      "q": "Kann ich nur einige bestimmte Frames statt des gesamten Videos extrahieren?",
+      "a": "Ja — wechsle den Bereichs-Wähler von „Gesamtes Video“ zu „Eigener Bereich“ und gib eine Start- und End-Frame ein. Das Tool extrahiert nur die Frames in diesem Bereich. Die metadata.json speichert den Bereich und die Quell-FPS, damit du später dort weitermachen kannst."
+    },
+    "3": {
+      "q": "Welche FPS sollte ich wählen?",
+      "a": "12 für TV-Anime (Standard-Ausstrahlungsrate), 24 für Film, 30 für Web-Video, 60 für Spiele. Wenn du jedes Quell-Frame willst, wähle Quellrate. Die Quellrate wird beim Laden eines Videos automatisch erkannt."
+    },
+    "4": {
+      "q": "Was, wenn mein Video 1000 Frames lang ist und ich alle will?",
+      "a": "Belasse die FPS auf Quellrate und den Bereich auf Gesamtes Video. Das Tool extrahiert jeden Frame und packt sie in eine ZIP. Bei sehr langen Videos kann die Extraktion eine Minute dauern — der Fortschrittsbalken zeigt den aktuellen Stand."
+    },
+    "title": "Häufig gestellte Fragen"
   }
 }

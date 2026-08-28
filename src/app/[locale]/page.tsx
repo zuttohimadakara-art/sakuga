@@ -41,7 +41,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
               offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
               featureList: [
                 tFeature('clientSide'),
-                tFeature('sakugabooru'),
+                tFeature('range'),
                 tFeature('scrub'),
                 tFeature('fps'),
                 tFeature('zip'),
@@ -98,7 +98,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {[
             { key: 'clientSide', icon: '🔒' },
-            { key: 'sakugabooru', icon: '🔗' },
+            { key: 'range', icon: '✂️' },
             { key: 'scrub', icon: '⏯' },
             { key: 'fps', icon: '⚡' },
             { key: 'zip', icon: '📦' },
