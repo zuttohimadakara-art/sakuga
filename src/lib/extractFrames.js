@@ -153,40 +153,57 @@ export async function extractFrames(video, options = {}) {
 }
 
 /**
- * Seek the video to time t and resolve when the frame is ready to draw.
- * Uses requestVideoFrameCallback if available (frame-accurate), else
- * falls back to the 'seeked' event (which fires when the video is at the
- * right time but the frame may be one off — close enough for most uses).
+ * Seek the video to time t and resolve when a frame at that time is ready to draw.
+ *
+ * Strategy: combine THREE signals so we never miss a frame:
+ *   1. 'seeked' event — fires when the browser has finished seeking. Most reliable
+ *      on paused local files. Wait for this first.
+ *   2. requestVideoFrameCallback — fires when the next frame is presented. Used
+ *      as a backup to confirm the frame is actually rendered at the target time
+ *      (in case 'seeked' fires but the previous frame is still on screen).
+ *   3. Timeout fallback — old default was 500ms, which was too short for HD
+ *      video at later positions where the browser needs to seek + decode
+ *      frames it hasn't touched yet. Bumped to 4s.
  */
 function seekTo(video, t) {
-  return new Promise((resolve, reject) => {
-    if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
-      let done = false;
-      const onFrame = (now, meta) => {
-        if (done) return;
-        // Only accept if we're at (or past) the target time
-        if (meta.mediaTime >= t - 0.02) {
-          done = true;
-          video.cancelVideoFrameCallback(handle);
-          resolve();
-        }
-      };
-      const handle = video.requestVideoFrameCallback(onFrame);
-      video.currentTime = Math.max(0, t);
-      // Safety: resolve after 500ms if the callback never fires
-      setTimeout(() => { if (!done) { done = true; resolve(); } }, 500);
-    } else {
-      const onSeeked = () => {
-        video.removeEventListener('seeked', onSeeked);
+  return new Promise((resolve) => {
+    const target = Math.max(0, Math.min(video.duration || t, t));
+    let done = false;
+    const cleanup = () => {
+      if (done) return;
+      done = true;
+      video.removeEventListener('seeked', onSeeked);
+    };
+    const onSeeked = () => {
+      if (done) return;
+      // After 'seeked' fires, also wait for a frame to be presented at/after t
+      if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
+        let frameResolved = false;
+        const onFrame = (now, meta) => {
+          if (frameResolved) return;
+          if (meta.mediaTime >= target - 0.05) {
+            frameResolved = true;
+            cleanup();
+            resolve();
+          }
+        };
+        video.requestVideoFrameCallback(onFrame);
+        // Backup if no frame callback within 2s after 'seeked'
+        setTimeout(() => {
+          if (!done) { cleanup(); resolve(); }
+        }, 2000);
+      } else {
+        cleanup();
         resolve();
-      };
-      video.addEventListener('seeked', onSeeked, { once: true });
-      video.currentTime = Math.max(0, t);
-      setTimeout(() => {
-        video.removeEventListener('seeked', onSeeked);
-        resolve();
-      }, 500);
-    }
+      }
+    };
+    video.addEventListener('seeked', onSeeked, { once: true });
+    // Trigger the seek
+    video.currentTime = target;
+    // Ultimate backup: resolve after 4s no matter what
+    setTimeout(() => {
+      if (!done) { cleanup(); resolve(); }
+    }, 4000);
   });
 }
 
@@ -204,44 +221,67 @@ function canvasToBlob(canvas, mime, quality) {
  */
 async function probeSourceFps(video) {
   if (!('requestVideoFrameCallback' in HTMLVideoElement.prototype)) {
-    // Best-effort heuristic: look for common rates in container metadata.
-    // Otherwise default to 24 (film) which is a safe middle ground.
     return 24;
   }
+  // Capture the current state so we can restore it
+  const wasPaused = video.paused;
+  const restoreTime = video.currentTime;
+  const restoreMuted = video.muted;
+  const restorePlaybackRate = video.playbackRate;
+  video.muted = true;
+  video.playbackRate = 1.0;
+
   return new Promise((resolve) => {
-    const startTime = video.currentTime;
     let count = 0;
     let done = false;
-    const onFrame = () => {
+    let startTime = 0;
+    let endTime = 0;
+
+    const finish = (fallback = false) => {
       if (done) return;
+      done = true;
+      try {
+        video.pause();
+        video.currentTime = restoreTime;
+        video.muted = restoreMuted;
+        video.playbackRate = restorePlaybackRate;
+        if (wasPaused) video.pause();
+        else video.play().catch(() => {});
+      } catch { /* ignore */ }
+      if (fallback || endTime - startTime < 0.3 || count < 2) {
+        resolve(24);
+        return;
+      }
+      const fps = (count - 1) / (endTime - startTime);
+      const common = [12, 15, 18, 20, 23.976, 24, 25, 29.97, 30, 48, 50, 59.94, 60, 120];
+      const nearest = common.reduce(
+        (b, c) => Math.abs(c - fps) < Math.abs(b - fps) ? c : b,
+        24
+      );
+      const final = Math.abs(nearest - fps) <= 0.5 ? nearest : Math.max(1, Math.round(fps));
+      resolve(final);
+    };
+
+    const onFrame = (now, meta) => {
+      if (done) return;
+      if (count === 0) {
+        startTime = meta.mediaTime;
+      }
       count++;
-      if (video.currentTime - startTime >= 1.0) {
-        done = true;
-        // Count includes the frame AT 1.0; subtract one for fence-post
-        const fps = Math.max(1, Math.round(count - 1));
-        // Snap to common rates if very close
-        const common = [23.976, 24, 25, 29.97, 30, 48, 50, 59.94, 60, 120];
-        const nearest = common.reduce((best, c) =>
-          Math.abs(c - fps) < Math.abs(best - fps) ? c : best
-        , 24);
-        // If within 2 of a common rate, use that
-        const final = Math.abs(nearest - fps) <= 2 ? nearest : fps;
-        video.currentTime = startTime;
-        resolve(final);
+      endTime = meta.mediaTime;
+      if (endTime - startTime >= 1.0) {
+        finish();
       } else {
         video.requestVideoFrameCallback(onFrame);
-        video.currentTime = Math.min(video.duration, startTime + (count * 0.5 / 30));
-        // ^ advance time so we see NEW frames
       }
     };
-    const handle = video.requestVideoFrameCallback(onFrame);
-    video.currentTime = Math.min(video.duration, startTime + 0.001);
-    // Safety timeout
-    setTimeout(() => {
-      if (!done) {
-        done = true;
-        resolve(24);
-      }
-    }, 5000);
+
+    // Safety timeout — if 4s pass and we haven't measured 1s of playback
+    setTimeout(() => finish(true), 4000);
+
+    // Seek to start, then start playing
+    video.currentTime = 0;
+    video.requestVideoFrameCallback(onFrame);
+    video.play().catch(() => finish(true));
   });
 }
