@@ -17,6 +17,7 @@
     "nav": {
       "home": "Tool",
       "about": "About",
+      "contact": "Contact",
       "privacy": "Privacy"
     }
   },
@@ -25,6 +26,44 @@
     "title": "Pull frames from any video.",
     "subtitle": "Drop a clip, paste a sakugabooru link, or point at any MP4. Step through frame-by-frame, pick the FPS you want, and download a ZIP of PNGs.",
     "cta": "Load a video"
+  },
+  "homeFeatures": {
+    "title": "Built for the way animators actually work.",
+    "clientSideTitle": "Runs in your browser",
+    "clientSide": "100% client-side. Your clips never upload to any server — the video, the frames, and the ZIP all stay on your machine.",
+    "sakugabooruTitle": "Sakugabooru-friendly",
+    "sakugabooru": "Paste any sakugabooru post URL and we'll find the MP4. Or load a direct video link from anywhere.",
+    "scrubTitle": "Frame-accurate stepping",
+    "scrub": "Use the arrow keys to step one frame at a time. Space to play and pause. The scrub bar is driven by requestVideoFrameCallback for true frame accuracy.",
+    "fpsTitle": "Any target FPS",
+    "fps": "Pick 12 for TV anime, 24 for film, 30 for web, 60 for games, or any custom value. Source rate is auto-detected.",
+    "zipTitle": "ZIP with metadata",
+    "zip": "Frames export as a ZIP with sequential filenames (frame_0001.png, frame_0002.png, …) and a metadata.json sidecar with source info, FPS, and the full file list.",
+    "freeTitle": "Free, no signup",
+    "free": "No account, no watermark, no limits beyond what your browser can handle. Runs on a free Vercel deploy with no servers."
+  },
+  "homeFaq": {
+    "title": "Frequently asked questions",
+    "0": {
+      "q": "Does getsakuga upload my video to a server?",
+      "a": "No. Everything runs in your browser using the HTML5 video element and the canvas API. The video, the extracted frames, and the ZIP all stay on your device. We have no server-side processing, and we never see your video content."
+    },
+    "1": {
+      "q": "Which video formats work?",
+      "a": "Anything your browser can play — MP4 (H.264), WebM, MOV, animated GIF, and most MP4-encoded clips. If your browser can't decode the codec, the player shows a clear error message instead of failing silently."
+    },
+    "2": {
+      "q": "Can I extract from a sakugabooru post?",
+      "a": "Yes — paste any sakugabooru post URL (e.g. https://www.sakugabooru.com/post/show/123456). The tool reads the post page, finds the MP4 file, and loads it. If the post blocks cross-origin access, download the MP4 and drop it in instead."
+    },
+    "3": {
+      "q": "What FPS should I choose?",
+      "a": "12 for TV anime (the standard on-broadcast rate), 24 for film, 30 for web video, 60 for games. If you want every source frame, pick Source rate. The source rate is auto-detected when you load a video."
+    },
+    "4": {
+      "q": "What if my video is 1000 frames long and I want all of them?",
+      "a": "Leave the FPS on Source rate and the range on Whole video. The tool will extract every frame and pack them into a ZIP. For very long videos, the extraction might take a minute — the progress bar will show the current state."
+    }
   },
   "input": {
     "tabFile": "Upload file",
@@ -96,6 +135,7 @@
     "tagline": "Made for animators who study other animators.",
     "madeBy": "Made by {name} for the people who draw moving pictures.",
     "aboutLink": "About",
+    "contactLink": "Contact",
     "privacyLink": "Privacy"
   },
   "about": {
@@ -107,6 +147,23 @@
       "scrub": "Frame-accurate stepping using the browser's video element.",
       "zip": "Frame sequences export as a ZIP with sequential filenames.",
       "free": "Free forever. No signup, no watermark, no limits beyond what your browser can handle."
+    }
+  },
+  "contact": {
+    "title": "Get in touch",
+    "intro": "Bug reports, feature requests, anime clip recommendations — all welcome. I read everything that comes in.",
+    "emailTitle": "Email",
+    "emailBody": "The fastest way to reach me. Replies usually within 1-2 days.",
+    "topicsTitle": "Good reasons to write",
+    "topics1": "A clip wouldn't load or extract — send the file format and I'll see if I can fix the codec path.",
+    "topics2": "Feature ideas — especially around batch operations, range presets, or new export formats.",
+    "topics3": "Japanese-language corrections for the UI. The translations are good but not native — I always want to make them better.",
+    "responseTitle": "Response time",
+    "responseBody": "I usually reply within 1-2 days, sometimes faster. If you don't hear back in a week, feel free to follow up.",
+    "back": "Back to the tool",
+    "meta": {
+      "title": "Contact getsakuga",
+      "description": "Get in touch with the getsakuga team — bug reports, feature requests, and feedback welcome."
     }
   },
   "seo": {

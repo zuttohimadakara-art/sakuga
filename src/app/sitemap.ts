@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 import { locales, defaultLocale } from '@/i18n/locales';
 import { SITE } from '@/lib/SITE';
 
-const ROUTES = ['', '/about', '/privacy'] as const;
+const ROUTES = ['', '/about', '/privacy', '/contact'] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const entries: MetadataRoute.Sitemap = [];

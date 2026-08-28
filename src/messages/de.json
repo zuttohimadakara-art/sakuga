@@ -17,7 +17,8 @@
     "nav": {
       "home": "Tool",
       "about": "Über",
-      "privacy": "Datenschutz"
+      "privacy": "Datenschutz",
+      "contact": "Kontakt"
     }
   },
   "hero": {
@@ -96,7 +97,8 @@
     "tagline": "Für Animator:innen, die andere Animator:innen studieren.",
     "madeBy": "Von {name} für die Leute, die bewegte Bilder zeichnen.",
     "aboutLink": "Über",
-    "privacyLink": "Datenschutz"
+    "privacyLink": "Datenschutz",
+    "contactLink": "Kontakt"
   },
   "about": {
     "title": "Über getsakuga",
@@ -111,5 +113,22 @@
   },
   "seo": {
     "keywords": "Frame-Extraktor, Video zu Frames, Animationsreferenz, Sakugabooru-Downloader, Bild für Bild, Video zu PNG, Animationsstudie, Motion-Referenz"
+  },
+  "contact": {
+    "title": "Kontakt aufnehmen",
+    "intro": "Fehlerberichte, Funktionswünsche, Anime-Clip-Empfehlungen — alles willkommen. Ich lese alles, was hereinkommt.",
+    "emailTitle": "E-Mail",
+    "emailBody": "Der schnellste Weg, mich zu erreichen. Antworten normalerweise innerhalb von 1-2 Tagen.",
+    "topicsTitle": "Gute Gründe zu schreiben",
+    "topics1": "Ein Clip lädt oder extrahiert nicht — schick mir das Dateiformat und ich schaue, ob ich den Codec-Pfad fixen kann.",
+    "topics2": "Feature-Ideen — besonders zu Batch-Operationen, Bereichs-Presets oder neuen Export-Formaten.",
+    "topics3": "Korrekturen der deutschen Übersetzung. Die Übersetzungen sind gut, aber nicht muttersprachlich.",
+    "responseTitle": "Antwortzeit",
+    "responseBody": "Ich antworte normalerweise innerhalb von 1-2 Tagen, manchmal schneller. Wenn du nach einer Woche nichts gehört hast, gerne nochmal nachhaken.",
+    "back": "Zurück zum Tool",
+    "meta": {
+      "title": "Kontakt — getsakuga",
+      "description": "Kontakt zum getsakuga-Team — Fehlerberichte, Funktionswünsche und Feedback willkommen."
+    }
   }
 }

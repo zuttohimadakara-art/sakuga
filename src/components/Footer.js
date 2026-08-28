@@ -9,6 +9,7 @@ export default async function Footer() {
         <p>{t('tagline')}</p>
         <nav className="flex items-center gap-4">
           <Link href="/about" className="hover:text-fg-muted transition">{t('aboutLink')}</Link>
+          <Link href="/contact" className="hover:text-fg-muted transition">{t('contactLink')}</Link>
           <Link href="/privacy" className="hover:text-fg-muted transition">{t('privacyLink')}</Link>
         </nav>
       </div>

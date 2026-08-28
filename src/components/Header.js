@@ -22,7 +22,7 @@ export default async function Header() {
         <nav className="hidden sm:flex items-center gap-5 text-sm text-fg-muted">
           <Link href="/" className="hover:text-fg transition">{t('nav.home')}</Link>
           <Link href="/about" className="hover:text-fg transition">{t('nav.about')}</Link>
-          <Link href="/privacy" className="hover:text-fg transition">{t('nav.privacy')}</Link>
+          <Link href="/contact" className="hover:text-fg transition">{t('nav.contact')}</Link>
         </nav>
         <LocaleSwitcher />
       </div>
