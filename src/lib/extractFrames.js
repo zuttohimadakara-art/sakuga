@@ -50,11 +50,19 @@ export async function extractFrames(video, options = {}) {
   if (endF < startF) {
     throw new Error('End frame must be after start frame.');
   }
-  const framesToExtract = endF - startF + 1;
 
-  // The actual interval between extractions in seconds. fps <= 0 means "every frame".
+  // The actual FPS we'll extract at. fps <= 0 means "every source frame" (source rate).
   const effectiveFps = fps > 0 ? fps : sourceFps;
-  const interval = 1 / effectiveFps; // seconds between frames
+
+  // Convert source-frame range to time range (in seconds).
+  // Source frame N lives at time (N - 0.5) / sourceFps (center of its interval).
+  const startTime = (startF - 0.5) / sourceFps;
+  const endTime = (endF + 0.5) / sourceFps;
+  const rangeDuration = Math.max(0, endTime - startTime);
+
+  // Number of frames to extract, based on the EFFECTIVE fps (not source fps).
+  // This is the actual count the user gets in the ZIP.
+  const totalToExtract = Math.max(1, Math.round(rangeDuration * effectiveFps));
 
   // Video dimensions, scaled
   const w = Math.max(1, Math.round((video.videoWidth || 1280) * size));
@@ -75,23 +83,25 @@ export async function extractFrames(video, options = {}) {
   const folder = zip.folder('frames');
   const mime = format === 'jpeg' ? 'image/jpeg' : 'image/png';
   const ext = format === 'jpeg' ? 'jpg' : 'png';
-  const padDigits = String(totalSourceFrames).length;
+  // Pad filenames to the larger of (total source frames) and (total output frames)
+  // so a 24fps source extracted at 60fps doesn't produce frame_0001.png for both.
+  const padDigits = String(Math.max(totalSourceFrames, totalToExtract)).length;
 
-  // Frame loop — we extract by 1-based frame index in the source video.
-  // Source frame N is at time (N - 0.5) / sourceFps (the center of its interval).
-  // For target FPS extraction we pick the source frames closest to multiples of (1/fps).
+  // Frame loop — iterate by time at the target FPS.
+  // Each output frame is at time t = startTime + (i + 0.5) / effectiveFps.
+  // The source frame at that time is round(t * sourceFps) + 1 (1-based).
   let extractedCount = 0;
+  const filenames = [];
 
-  for (let i = 0; i < framesToExtract; i++) {
+  for (let i = 0; i < totalToExtract; i++) {
     if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
 
-    // Compute the source frame index we want
-    const sourceFrameIdx = startF + i;
-    // Time at the center of that source frame
-    const t = (sourceFrameIdx - 0.5) / sourceFps;
-
-    // Skip if beyond duration
+    const t = startTime + (i + 0.5) / effectiveFps;
     if (t > video.duration) break;
+    if (t < 0) continue;
+
+    // Source frame number for the filename (1-based)
+    const sourceFrameIdx = Math.max(1, Math.round(t * sourceFps) + 1);
 
     // Seek and wait for the frame to be ready
     await seekTo(video, t);
@@ -105,10 +115,11 @@ export async function extractFrames(video, options = {}) {
     // Filename: frame_00001.png
     const filename = `frame_${String(sourceFrameIdx).padStart(padDigits, '0')}.${ext}`;
     folder.file(filename, blob);
+    filenames.push(`frames/${filename}`);
 
     extractedCount++;
-    if (i % 5 === 0 || i === framesToExtract - 1) {
-      onProgress({ done: i + 1, total: framesToExtract });
+    if (i % 5 === 0 || i === totalToExtract - 1) {
+      onProgress({ done: i + 1, total: totalToExtract });
     }
 
     // Yield to the event loop so the UI can repaint
@@ -126,15 +137,13 @@ export async function extractFrames(video, options = {}) {
     extract: {
       fps: effectiveFps,
       startFrame: startF,
-      endFrame: startF + extractedCount - 1,
+      endFrame: endF,
       count: extractedCount,
       format,
       size: { width: w, height: h },
       jpegQuality: format === 'jpeg' ? jpegQuality : undefined,
     },
-    filenames: Array.from({ length: extractedCount }, (_, i) =>
-      `frames/frame_${String(startF + i).padStart(padDigits, '0')}.${ext}`
-    ),
+    filenames,
   };
   folder.file('metadata.json', JSON.stringify(meta, null, 2));
 
